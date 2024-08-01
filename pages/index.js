@@ -10,10 +10,9 @@ import VehiclePieChart from '../components/VehiclePieChart';
 import TestCard from '../components/TestCard';
 import NavBar from '../components/NavBar';
 import VehicleHealthReport from '../components/VehicleHealthReport';
-import LiveDataMonitoring from '../components/LiveDataMonitoring';
-import EmissionTesting from '../components/EmissionTesting';
 import SoftwareManagement from '../components/SoftwareManagement';
 import PermissionHandler from '../components/PermissionHandler';
+import LiveBugChart from '../components/LiveBugChart';
 import {
   mockVoltageData,
   mockStatusMessages,
@@ -21,6 +20,7 @@ import {
   mockVehicleTypes,
 } from './mockData';
 
+const ChargerIssueMap = dynamic(() => import('../components/ChargerIssueMap'), { ssr: false });
 const PDFDownloadLink = dynamic(() => import('@react-pdf/renderer').then(mod => mod.PDFDownloadLink), { ssr: false });
 
 const StyledContainer = styled(Container)({
@@ -150,12 +150,12 @@ export default function Home() {
         </Grid>
         <Grid item xs={12} md={6}>
           <StyledPaper>
-            <LiveDataMonitoring />
+            <LiveBugChart />
           </StyledPaper>
         </Grid>
         <Grid item xs={12} md={6}>
           <StyledPaper>
-            <EmissionTesting />
+            <ChargerIssueMap />
           </StyledPaper>
         </Grid>
         <Grid item xs={12}>
@@ -168,7 +168,6 @@ export default function Home() {
             <SoftwareManagement />
           </StyledPaper>
         </Grid>
-       
         <Grid item xs={12}>
           <StyledPaper>
             {typeof window !== 'undefined' && (

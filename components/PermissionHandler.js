@@ -21,8 +21,6 @@ const PermissionHandler = () => {
     setRequesting(true);
     setStatusMessage('Requesting permission from Odin...');
     try {
-      // Simulate a call to Odin for permission
-      // Replace this with actual API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
       setStatusMessage('Permission granted.');
     } catch (error) {
@@ -35,7 +33,7 @@ const PermissionHandler = () => {
   return (
     <Container>
       <Typography variant="h6" gutterBottom align="center">
-        Permission Handler
+        Odin Permission Handler
       </Typography>
       <Typography variant="body2" gutterBottom>
         The Permission Handler requests necessary permissions from Tesla's central service, through Odin, to perform maintenance actions and data transfers on the vehicle. Ensure you have the correct module and part names before proceeding.
