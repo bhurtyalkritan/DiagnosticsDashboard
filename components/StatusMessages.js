@@ -7,7 +7,7 @@ const TerminalBox = styled(Box)({
   color: '#0f0',
   padding: '10px',
   fontFamily: 'monospace',
-  maxHeight: '200px', // Adjust the max height as needed
+  maxHeight: '200px', 
   overflowY: 'scroll',
   borderRadius: '10px',
 });

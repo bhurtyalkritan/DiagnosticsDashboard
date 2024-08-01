@@ -12,6 +12,8 @@ import NavBar from '../components/NavBar';
 import VehicleHealthReport from '../components/VehicleHealthReport';
 import LiveDataMonitoring from '../components/LiveDataMonitoring';
 import EmissionTesting from '../components/EmissionTesting';
+import SoftwareManagement from '../components/SoftwareManagement';
+import PermissionHandler from '../components/PermissionHandler';
 import {
   mockVoltageData,
   mockStatusMessages,
@@ -34,10 +36,35 @@ const StyledPaper = styled(Paper)({
 
 export default function Home() {
   const [voltageData, setVoltageData] = useState(mockVoltageData);
-  const [statusMessages, setStatusMessages] = useState(mockStatusMessages);
+  const [statusMessages, setStatusMessages] = useState([]);
   const [vehicleTypes, setVehicleTypes] = useState(mockVehicleTypes);
   const [vehicleSpecs, setVehicleSpecs] = useState(mockVehicleSpecs);
   const [status, setStatus] = useState('Good');
+  const [charts, setCharts] = useState({});
+
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index < mockStatusMessages.length) {
+        setStatusMessages((prevMessages) => [...prevMessages, mockStatusMessages[index]]);
+        index++;
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleGenerateReport = async () => {
+    const voltageChartUrl = await chartToImage('voltage-chart');
+    const anomalyDetectionUrl = await chartToImage('anomaly-detection-chart');
+    const vehiclePieChartUrl = await chartToImage('vehicle-pie-chart');
+
+    setCharts({
+      voltageChartUrl,
+      anomalyDetectionUrl,
+      vehiclePieChartUrl,
+    });
+  };
 
   // Uncomment this section to fetch real data from the server
   // useEffect(() => {
@@ -90,7 +117,7 @@ export default function Home() {
           </StyledPaper>
         </Grid>
         <Grid item xs={12} md={6}>
-          <StyledPaper>
+          <StyledPaper id="anomaly-detection-chart">
             <Typography variant="h6" align="center" gutterBottom>
               Anomaly Detection
             </Typography>
@@ -98,7 +125,7 @@ export default function Home() {
           </StyledPaper>
         </Grid>
         <Grid item xs={12} md={6}>
-          <StyledPaper>
+          <StyledPaper id="voltage-chart">
             <Typography variant="h6" align="center" gutterBottom>
               Voltage Data
             </Typography>
@@ -106,7 +133,7 @@ export default function Home() {
           </StyledPaper>
         </Grid>
         <Grid item xs={12} md={6}>
-          <StyledPaper>
+          <StyledPaper id="vehicle-pie-chart">
             <Typography variant="h6" align="center" gutterBottom>
               Vehicle Types Distribution
             </Typography>
@@ -133,9 +160,20 @@ export default function Home() {
         </Grid>
         <Grid item xs={12}>
           <StyledPaper>
+            <PermissionHandler />
+          </StyledPaper>
+        </Grid>
+        <Grid item xs={12}>
+          <StyledPaper>
+            <SoftwareManagement />
+          </StyledPaper>
+        </Grid>
+       
+        <Grid item xs={12}>
+          <StyledPaper>
             {typeof window !== 'undefined' && (
               <PDFDownloadLink
-                document={<VehicleHealthReport vehicleData={vehicleData} />}
+                document={<VehicleHealthReport vehicleData={vehicleData} charts={charts} />}
                 fileName="vehicle_health_report.pdf"
                 style={{ textDecoration: 'none' }}
               >
@@ -145,7 +183,12 @@ export default function Home() {
                       Generating Report...
                     </Button>
                   ) : (
-                    <Button variant="contained" color="primary" fullWidth>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      onClick={handleGenerateReport}
+                    >
                       Generate Vehicle Health Report
                     </Button>
                   )
