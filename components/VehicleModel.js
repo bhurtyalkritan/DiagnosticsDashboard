@@ -7,7 +7,7 @@ const VehicleModel = ({ modelPath }) => {
   const ref = useRef();
 
   useFrame(() => {
-    ref.current.rotation.y += 0.01; // Rotate the model
+    ref.current.rotation.y += 0.01; 
   });
 
   return <primitive ref={ref} object={scene} scale={0.1} />;

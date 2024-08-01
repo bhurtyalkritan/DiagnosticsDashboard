@@ -3,7 +3,7 @@ import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, 
 import { styled } from '@mui/system';
 
 const ScrollBox = styled(Box)({
-  maxHeight: '200px', // Adjust the max height as needed
+  maxHeight: '200px', 
   overflowY: 'scroll',
   borderRadius: '10px',
   padding: '10px',

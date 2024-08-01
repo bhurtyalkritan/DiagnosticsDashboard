@@ -66,7 +66,7 @@ export default function Home() {
     });
   };
 
-  // Uncomment this section to fetch real data from the server
+  // 
   // useEffect(() => {
   //   async function fetchData() {
   //     try {
