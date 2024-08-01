@@ -1,0 +1,188 @@
+export const mockVoltageData = [
+    {
+      timestamp: '2023-07-31T12:34:56Z',
+      voltage: 12.6,
+      temperature: 25.0,
+      current: 1.2,
+      engine_rpm: 1500,
+      vehicle_speed: 60,
+      fuel_level: 50,
+      status: 'OK',
+      status_message: 'Normal operation',
+    },
+    {
+      timestamp: '2023-07-31T12:35:56Z',
+      voltage: 12.5,
+      temperature: 26.0,
+      current: 1.3,
+      engine_rpm: 1520,
+      vehicle_speed: 62,
+      fuel_level: 48,
+      status: 'OK',
+      status_message: 'Normal operation',
+    },
+    {
+      timestamp: '2023-07-31T12:36:56Z',
+      voltage: 12.7,
+      temperature: 27.0,
+      current: 1.4,
+      engine_rpm: 1550,
+      vehicle_speed: 65,
+      fuel_level: 46,
+      status: 'OK',
+      status_message: 'Normal operation',
+    },
+    {
+      timestamp: '2023-07-31T12:37:56Z',
+      voltage: 12.8,
+      temperature: 28.0,
+      current: 1.5,
+      engine_rpm: 1570,
+      vehicle_speed: 68,
+      fuel_level: 44,
+      status: 'OK',
+      status_message: 'Normal operation',
+    },
+    {
+      timestamp: '2023-07-31T12:38:56Z',
+      voltage: 12.9,
+      temperature: 29.0,
+      current: 1.6,
+      engine_rpm: 1600,
+      vehicle_speed: 70,
+      fuel_level: 42,
+      status: 'OK',
+      status_message: 'Normal operation',
+    },
+    {
+      timestamp: '2023-07-31T12:39:56Z',
+      voltage: 13.0,
+      temperature: 30.0,
+      current: 1.7,
+      engine_rpm: 1620,
+      vehicle_speed: 72,
+      fuel_level: 40,
+      status: 'OK',
+      status_message: 'Normal operation',
+    },
+    {
+      timestamp: '2023-07-31T12:40:56Z',
+      voltage: 13.1,
+      temperature: 31.0,
+      current: 1.8,
+      engine_rpm: 1650,
+      vehicle_speed: 75,
+      fuel_level: 38,
+      status: 'OK',
+      status_message: 'Normal operation',
+    },
+    {
+      timestamp: '2023-07-31T12:41:56Z',
+      voltage: 13.2,
+      temperature: 32.0,
+      current: 1.9,
+      engine_rpm: 1670,
+      vehicle_speed: 78,
+      fuel_level: 36,
+      status: 'OK',
+      status_message: 'Normal operation',
+    },
+  ];
+  
+  export const mockStatusMessages = [
+    {
+      timestamp: '2023-07-31T12:34:56Z',
+      alert_message: 'Voltage within normal range.',
+    },
+    {
+      timestamp: '2023-07-31T12:35:56Z',
+      alert_message: 'Engine RPM stable.',
+    },
+    {
+      timestamp: '2023-07-31T12:36:56Z',
+      alert_message: 'Temperature within normal range.',
+    },
+    {
+      timestamp: '2023-07-31T12:37:56Z',
+      alert_message: 'Fuel level adequate.',
+    },
+    {
+      timestamp: '2023-07-31T12:38:56Z',
+      alert_message: 'Vehicle speed consistent.',
+    },
+    {
+      timestamp: '2023-07-31T12:39:56Z',
+      alert_message: 'Current within normal range.',
+    },
+    {
+      timestamp: '2023-07-31T12:40:56Z',
+      alert_message: 'Battery voltage stable.',
+    },
+    {
+      timestamp: '2023-07-31T12:41:56Z',
+      alert_message: 'System operating normally.',
+    },
+  ];
+  
+  export const mockVehicleSpecs = [
+    {
+      vehicle_type: 'Model S',
+      horsepower: 670,
+      torque: 800,
+      weight: 2200,
+    },
+    {
+      vehicle_type: 'Model 3',
+      horsepower: 480,
+      torque: 600,
+      weight: 1800,
+    },
+    {
+      vehicle_type: 'Model X',
+      horsepower: 560,
+      torque: 780,
+      weight: 2500,
+    },
+    {
+      vehicle_type: 'Cybertruck',
+      horsepower: 800,
+      torque: 1000,
+      weight: 3500,
+    },
+    {
+      vehicle_type: 'Model Y',
+      horsepower: 450,
+      torque: 610,
+      weight: 1900,
+    },
+    {
+      vehicle_type: 'Roadster',
+      horsepower: 1000,
+      torque: 1200,
+      weight: 1400,
+    },
+    {
+      vehicle_type: 'Semi',
+      horsepower: 2000,
+      torque: 3000,
+      weight: 8000,
+    },
+    {
+      vehicle_type: 'Model Z',
+      horsepower: 300,
+      torque: 400,
+      weight: 1600,
+    },
+  ];
+  
+  export const mockVehicleTypes = [
+    { name: 'Model S', count: 10 },
+    { name: 'Model 3', count: 15 },
+    { name: 'Model X', count: 5 },
+    { name: 'Cybertruck', count: 3 },
+    { name: 'Model Y', count: 7 },
+    { name: 'Roadster', count: 2 },
+    { name: 'Semi', count: 1 },
+    { name: 'Model Z', count: 8 },
+  ];
+  
