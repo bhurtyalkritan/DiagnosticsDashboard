@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { styled } from '@mui/system';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import chargerIconUrl from '../public/charger-icon.png'; // Adjust the path to your image
+import chargerIconUrl from '../public/charger-icon.png'; 
 
 const chargerIssues = [
   { id: 1, location: [37.7749, -122.4194], description: 'Charger not working' },
@@ -27,6 +27,7 @@ const customIcon = new L.Icon({
 const ChargerIssueMap = () => {
   return (
     <StyledMapContainer center={[37.7749, -122.4194]} zoom={4}>
+      
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
