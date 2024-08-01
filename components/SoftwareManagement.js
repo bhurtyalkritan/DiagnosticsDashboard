@@ -168,10 +168,10 @@ const SoftwareManagement = () => {
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <Button variant="outlined" fullWidth>Reset Contractor Stress Index</Button>
+              <Button variant="outlined" fullWidth>Reset Contactor Stress Index</Button>
             </Grid>
             <Grid item xs={6}>
-              <Button variant="outlined" fullWidth>Reset Contractor WOT Count</Button>
+              <Button variant="outlined" fullWidth>Reset Contactor WOT Count</Button>
             </Grid>
             <Grid item xs={6}>
               <Button variant="outlined" fullWidth>BMS Contact Reset</Button>
@@ -343,7 +343,7 @@ const SoftwareManagement = () => {
                 <Button variant="outlined" fullWidth>Contact Reset</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Contractor Stress Index</Button>
+                <Button variant="outlined" fullWidth>Contactor Stress Index</Button>
               </Grid>
               <Grid item xs={6}>
                 <Button variant="outlined" fullWidth>WOT Count</Button>
