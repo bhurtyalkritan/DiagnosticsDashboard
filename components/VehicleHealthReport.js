@@ -60,9 +60,9 @@ const VehicleHealthReport = ({ vehicleData }) => (
       <View style={styles.section}>
         <Text style={styles.subheading}>Overview</Text>
         <Text style={styles.text}>
-          This report provides a comprehensive analysis of the vehicle's current health status,
+          This report provides a comprehensive analysis of the vehicle&apos;s current health status,
           including real-time sensor data, engine parameters, emission test results, and more.
-          Each section is designed to give you detailed insights into the vehicle's performance
+          Each section is designed to give you detailed insights into the vehicle&apos;s performance
           and any potential issues that may need attention.
         </Text>
       </View>
@@ -70,7 +70,7 @@ const VehicleHealthReport = ({ vehicleData }) => (
       <View style={styles.section}>
         <Text style={styles.subheading}>Status Messages</Text>
         <Text style={styles.text}>
-          The status messages provide real-time alerts and notifications about the vehicle's
+          The status messages provide real-time alerts and notifications about the vehicle&apos;s
           performance. These messages can help you quickly identify any anomalies or issues
           that need immediate attention.
         </Text>
@@ -106,7 +106,7 @@ const VehicleHealthReport = ({ vehicleData }) => (
         <Text style={styles.subheading}>Vehicle Specifications</Text>
         <Text style={styles.text}>
           The following table lists the key specifications of the vehicle. This information is
-          essential for understanding the vehicle's capabilities and performance characteristics.
+          essential for understanding the vehicle&apos;s capabilities and performance characteristics.
         </Text>
         <View style={styles.table}>
           <View style={styles.tableRow}>
@@ -245,7 +245,7 @@ const VehicleHealthReport = ({ vehicleData }) => (
       <View style={styles.section}>
         <Text style={styles.subheading}>Conclusion</Text>
         <Text style={styles.text}>
-          This report has provided an in-depth analysis of the vehicle's health status. Regular
+          This report has provided an in-depth analysis of the vehicle&apos;s health status. Regular
           monitoring and maintenance based on this report can help ensure optimal performance
           and longevity of the vehicle. If any issues were identified, it is recommended to
           address them promptly to avoid further complications.
