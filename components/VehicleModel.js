@@ -119,7 +119,7 @@ const VehicleDisplay = ({ modelPath }) => {
     if (isLudicrousMode) {
       let start = Date.now();
       const duration = 2000; // duration of the animation in milliseconds
-      const distance = 40; // distance to move
+      const distance = 100; // increased distance to move
 
       const animate = () => {
         const timeElapsed = Date.now() - start;
