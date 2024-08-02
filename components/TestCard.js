@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, MenuItem } from '@mui/material';
-import axios from 'axios';
+import { TextField, Button, Typography, MenuItem, Box, Paper } from '@mui/material';
 
 const endpoints = [
   { value: 'http://127.0.0.1:8001/voltage?records=100', label: 'GET Voltage Data', method: 'GET' },
@@ -15,12 +14,23 @@ const endpoints = [
   }
 ];
 
+const CommandLine = ({ command, response }) => {
+  return (
+    <Paper elevation={3} style={{ padding: '10px', backgroundColor: '#000', color: '#0f0', marginTop: '20px' }}>
+      <Typography variant="body2" component="pre" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+        {command}
+        {response && `\n\n${response}`}
+      </Typography>
+    </Paper>
+  );
+};
+
 const TestCard = () => {
   const [endpoint, setEndpoint] = useState(endpoints[0].value);
   const [jsonInput, setJsonInput] = useState('');
   const [response, setResponse] = useState('');
-  const [error, setError] = useState('');
   const [method, setMethod] = useState(endpoints[0].method);
+  const [command, setCommand] = useState('');
 
   const handleEndpointChange = (e) => {
     const selectedEndpoint = endpoints.find((ep) => ep.value === e.target.value);
@@ -28,27 +38,27 @@ const TestCard = () => {
     setMethod(selectedEndpoint.method);
     setJsonInput(selectedEndpoint.method === 'POST' ? selectedEndpoint.template : '');
     setResponse('');
-    setError('');
+    setCommand('');
   };
 
-  const handleTest = async () => {
-    try {
-      let res;
-      if (method === 'GET') {
-        res = await axios.get(endpoint);
-      } else {
-        res = await axios.post(endpoint, JSON.parse(jsonInput));
-      }
-      setResponse(JSON.stringify(res.data, null, 2));
-      setError('');
-    } catch (err) {
-      setResponse('');
-      setError(err.message);
+  const handleTest = () => {
+    let commandStr = '';
+    let fakeResponse = '';
+
+    if (method === 'GET') {
+      commandStr = `curl -X GET "${endpoint}"`;
+      fakeResponse = '{"data": "This is a fake GET response"}';
+    } else {
+      commandStr = `curl -X POST "${endpoint}" -H "Content-Type: application/json" -d '${jsonInput}'`;
+      fakeResponse = '{"data": "This is a fake POST response"}';
     }
+
+    setResponse(fakeResponse);
+    setCommand(commandStr);
   };
 
   return (
-    <div>
+    <Box>
       <TextField
         select
         label="API Endpoint"
@@ -73,27 +83,11 @@ const TestCard = () => {
           margin="normal"
         />
       )}
-      {method === 'GET' && response && (
-        <TextField
-          label="Response Data"
-          value={response}
-          multiline
-          fullWidth
-          margin="normal"
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-      )}
       <Button variant="contained" color="primary" onClick={handleTest} fullWidth>
         Test API
       </Button>
-      {error && (
-        <Typography variant="body1" color="error" style={{ marginTop: '10px' }}>
-          {error}
-        </Typography>
-      )}
-    </div>
+      {command && <CommandLine command={command} response={response} />}
+    </Box>
   );
 };
 

@@ -1,6 +1,6 @@
 // components/PermissionHandler.js
 import React, { useState } from 'react';
-import { Box, Typography, TextField, Button, CircularProgress } from '@mui/material';
+import { Box, Typography, TextField, Button, CircularProgress, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { styled } from '@mui/system';
 
 const Container = styled(Box)({
@@ -10,6 +10,22 @@ const Container = styled(Box)({
   fontFamily: 'Lexend Deca, sans-serif',
   marginBottom: '20px',
 });
+
+const teslaModules = [
+  'Battery Management System',
+  'Drive Inverter',
+  'Autopilot Hardware',
+  'Vehicle Control Unit',
+  'Power Conversion System'
+];
+
+const teslaParts = {
+  'Battery Management System': ['Battery Pack', 'Battery Charger', 'Battery Sensor'],
+  'Drive Inverter': ['Inverter Module', 'Inverter Cooling System', 'Inverter Control Unit'],
+  'Autopilot Hardware': ['Camera', 'Radar', 'Ultrasonic Sensor'],
+  'Vehicle Control Unit': ['Main Control Unit', 'Vehicle Communication Module', 'Data Logger'],
+  'Power Conversion System': ['DC-DC Converter', 'Onboard Charger', 'Power Distribution Unit']
+};
 
 const PermissionHandler = () => {
   const [requesting, setRequesting] = useState(false);
@@ -30,6 +46,11 @@ const PermissionHandler = () => {
     }
   };
 
+  const handleModuleChange = (event) => {
+    setModuleName(event.target.value);
+    setPartName(''); // Reset part name when module changes
+  };
+
   return (
     <Container>
       <Typography variant="h6" gutterBottom align="center">
@@ -38,28 +59,41 @@ const PermissionHandler = () => {
       <Typography variant="body2" gutterBottom>
         The Permission Handler requests necessary permissions from Tesla's central service, through Odin, to perform maintenance actions and data transfers on the vehicle. Ensure you have the correct module and part names before proceeding.
       </Typography>
-      <TextField
-        label="Module Name"
-        variant="outlined"
-        fullWidth
-        value={moduleName}
-        onChange={(e) => setModuleName(e.target.value)}
-        sx={{ mb: 2 }}
-      />
-      <TextField
-        label="Part Name"
-        variant="outlined"
-        fullWidth
-        value={partName}
-        onChange={(e) => setPartName(e.target.value)}
-        sx={{ mb: 2 }}
-      />
+      <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
+        <InputLabel>Module Name</InputLabel>
+        <Select
+          value={moduleName}
+          onChange={handleModuleChange}
+          label="Module Name"
+        >
+          {teslaModules.map((module) => (
+            <MenuItem key={module} value={module}>
+              {module}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
+        <InputLabel>Part Name</InputLabel>
+        <Select
+          value={partName}
+          onChange={(e) => setPartName(e.target.value)}
+          label="Part Name"
+          disabled={!moduleName}
+        >
+          {(teslaParts[moduleName] || []).map((part) => (
+            <MenuItem key={part} value={part}>
+              {part}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       <Button
         variant="contained"
         color="primary"
         fullWidth
         onClick={handleRequestPermission}
-        disabled={requesting}
+        disabled={requesting || !moduleName || !partName}
       >
         {requesting ? <CircularProgress size={24} /> : 'Request Permission'}
       </Button>

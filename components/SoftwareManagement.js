@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Button, TextField, MenuItem, Select, FormControl, InputLabel, Grid, Tabs, Tab } from '@mui/material';
+import { Box, Typography, Button, TextField, MenuItem, Select, FormControl, InputLabel, Grid, Tabs, Tab, LinearProgress } from '@mui/material';
 import { styled } from '@mui/system';
 import { Line } from 'react-chartjs-2';
 import VehicleDisplay from './VehicleModel';
@@ -35,13 +35,15 @@ const subsections = [
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-
 const SoftwareManagement = () => {
   const [tab, setTab] = useState(0);
   const [section, setSection] = useState(subsections[0]);
   const [module, setModule] = useState('');
   const [part, setPart] = useState('');
   const [firmwareVersion, setFirmwareVersion] = useState('');
+  const [mockData, setMockData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const [liveData, setLiveData] = useState({
     labels: [],
     datasets: [
@@ -79,16 +81,47 @@ const SoftwareManagement = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleRedeploy = () => {
-    console.log(`Redeploying module: ${module}`);
+  const handleButtonClick = (action, detail) => {
+    setLoading(true);
+    setLoadingProgress(0);
+    setMockData(null);
+    const loadingInterval = setInterval(() => {
+      setLoadingProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(loadingInterval);
+          setLoading(false);
+          setMockData({ type: action, data: detail });
+          return 100;
+        }
+        return prev + 10;
+      });
+    }, 100);
   };
 
-  const handleReprogram = () => {
-    console.log(`Reprogramming part: ${part}`);
-  };
+  const renderMockData = () => {
+    if (loading) {
+      return (
+        <Section>
+          <Typography variant="h6" gutterBottom>
+            {mockData?.type} in progress...
+          </Typography>
+          <LinearProgress variant="determinate" value={loadingProgress} />
+        </Section>
+      );
+    }
 
-  const handleDownloadFirmware = () => {
-    console.log(`Downloading firmware version: ${firmwareVersion}`);
+    if (!mockData) return null;
+
+    return (
+      <Section>
+        <Typography variant="h6" gutterBottom>
+          {mockData.type} Result
+        </Typography>
+        <Typography variant="body1">
+          {mockData.data}
+        </Typography>
+      </Section>
+    );
   };
 
   const renderFunctions = () => {
@@ -105,7 +138,7 @@ const SoftwareManagement = () => {
             value={module}
             onChange={(e) => setModule(e.target.value)}
           />
-          <Button variant="contained" color="primary" fullWidth onClick={handleRedeploy} sx={{ mt: 2 }}>
+          <Button variant="contained" color="primary" fullWidth onClick={() => handleButtonClick('Redeploy Module', `Module ${module} redeployed successfully.`)} sx={{ mt: 2 }}>
             Redeploy Module
           </Button>
         </Section>
@@ -120,7 +153,7 @@ const SoftwareManagement = () => {
             value={part}
             onChange={(e) => setPart(e.target.value)}
           />
-          <Button variant="contained" color="primary" fullWidth onClick={handleReprogram} sx={{ mt: 2 }}>
+          <Button variant="contained" color="primary" fullWidth onClick={() => handleButtonClick('Reprogram Part', `Part ${part} reprogrammed successfully.`)} sx={{ mt: 2 }}>
             Reprogram Part
           </Button>
         </Section>
@@ -140,6 +173,7 @@ const SoftwareManagement = () => {
           </Select>
         </FormControl>
         {renderSection()}
+        {renderMockData()}
       </>
     );
   };
@@ -158,7 +192,7 @@ const SoftwareManagement = () => {
             value={firmwareVersion}
             onChange={(e) => setFirmwareVersion(e.target.value)}
           />
-          <Button variant="contained" color="primary" fullWidth onClick={handleDownloadFirmware} sx={{ mt: 2 }}>
+          <Button variant="contained" color="primary" fullWidth onClick={() => handleButtonClick('Download Firmware', `Firmware version ${firmwareVersion} downloaded successfully.`)} sx={{ mt: 2 }}>
             Download Firmware
           </Button>
         </Section>
@@ -168,13 +202,13 @@ const SoftwareManagement = () => {
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <Button variant="outlined" fullWidth>Reset Contactor Stress Index</Button>
+              <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Reset Contactor Stress Index', 'Contactor stress index reset successfully.')}>Reset Contactor Stress Index</Button>
             </Grid>
             <Grid item xs={6}>
-              <Button variant="outlined" fullWidth>Reset Contactor WOT Count</Button>
+              <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Reset Contactor WOT Count', 'Contactor WOT count reset successfully.')}>Reset Contactor WOT Count</Button>
             </Grid>
             <Grid item xs={6}>
-              <Button variant="outlined" fullWidth>BMS Contact Reset</Button>
+              <Button variant="outlined" fullWidth onClick={() => handleButtonClick('BMS Contact Reset', 'BMS contact reset successfully.')}>BMS Contact Reset</Button>
             </Grid>
           </Grid>
         </Section>
@@ -194,6 +228,7 @@ const SoftwareManagement = () => {
           </Select>
         </FormControl>
         {renderSection()}
+        {renderMockData()}
       </>
     );
   };
@@ -227,13 +262,13 @@ const SoftwareManagement = () => {
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Read All DTC</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Read All DTC', 'All DTCs read successfully.')}>Read All DTC</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Clear All DTC</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Clear All DTC', 'All DTCs cleared successfully.')}>Clear All DTC</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>View DTC</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('View DTC', 'DTC viewed successfully.')}>View DTC</Button>
               </Grid>
             </Grid>
           </Section>
@@ -246,16 +281,16 @@ const SoftwareManagement = () => {
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Set Ride Height</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Set Ride Height', 'Ride height set successfully.')}>Set Ride Height</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Service Mode</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Service Mode', 'Service mode activated successfully.')}>Service Mode</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Get Pressure</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Get Pressure', 'Pressure retrieved successfully.')}>Get Pressure</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Clear Crash Data</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Clear Crash Data', 'Crash data cleared successfully.')}>Clear Crash Data</Button>
               </Grid>
             </Grid>
           </Section>
@@ -268,10 +303,10 @@ const SoftwareManagement = () => {
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Check Brake System</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Check Brake System', 'Brake system checked successfully.')}>Check Brake System</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Reset Brake System</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Reset Brake System', 'Brake system reset successfully.')}>Reset Brake System</Button>
               </Grid>
             </Grid>
           </Section>
@@ -284,19 +319,19 @@ const SoftwareManagement = () => {
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Check Airbag Status</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Check Airbag Status', 'Airbag status checked successfully.')}>Check Airbag Status</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Reset Airbag System</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Reset Airbag System', 'Airbag system reset successfully.')}>Reset Airbag System</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Read EEPROM</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Read EEPROM', 'EEPROM read successfully.')}>Read EEPROM</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Unlock EEPROM</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Unlock EEPROM', 'EEPROM unlocked successfully.')}>Unlock EEPROM</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Erase VIN</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Erase VIN', 'VIN erased successfully.')}>Erase VIN</Button>
               </Grid>
             </Grid>
           </Section>
@@ -309,19 +344,19 @@ const SoftwareManagement = () => {
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Door Handles</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Door Handles', 'Door handles managed successfully.')}>Door Handles</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>ICE Breaker</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('ICE Breaker', 'ICE breaker activated successfully.')}>ICE Breaker</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Calibration Procedures</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Calibration Procedures', 'Calibration procedures completed successfully.')}>Calibration Procedures</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Remote Unlock Code</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Remote Unlock Code', 'Remote unlock code set successfully.')}>Remote Unlock Code</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Charge Port</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Charge Port', 'Charge port managed successfully.')}>Charge Port</Button>
               </Grid>
             </Grid>
           </Section>
@@ -334,19 +369,19 @@ const SoftwareManagement = () => {
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Read Battery Status</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Read Battery Status', 'Battery status read successfully.')}>Read Battery Status</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Reset Battery System</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Reset Battery System', 'Battery system reset successfully.')}>Reset Battery System</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Contact Reset</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Contact Reset', 'Contact reset successfully.')}>Contact Reset</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Contactor Stress Index</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Contactor Stress Index', 'Contactor stress index read successfully.')}>Contactor Stress Index</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>WOT Count</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('WOT Count', 'WOT count retrieved successfully.')}>WOT Count</Button>
               </Grid>
             </Grid>
           </Section>
@@ -359,16 +394,16 @@ const SoftwareManagement = () => {
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Check Cooling System</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Check Cooling System', 'Cooling system checked successfully.')}>Check Cooling System</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Reset Cooling System</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Reset Cooling System', 'Cooling system reset successfully.')}>Reset Cooling System</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>AirPurge Start/Stop</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('AirPurge Start/Stop', 'Air purge started/stopped successfully.')}>AirPurge Start/Stop</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>THC Refill/Drain</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('THC Refill/Drain', 'THC refill/drain completed successfully.')}>THC Refill/Drain</Button>
               </Grid>
             </Grid>
           </Section>
@@ -381,13 +416,13 @@ const SoftwareManagement = () => {
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Read BenchMode Status</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Read BenchMode Status', 'BenchMode status read successfully.')}>Read BenchMode Status</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Enable BenchMode</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Enable BenchMode', 'BenchMode enabled successfully.')}>Enable BenchMode</Button>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="outlined" fullWidth>Disable BenchMode</Button>
+                <Button variant="outlined" fullWidth onClick={() => handleButtonClick('Disable BenchMode', 'BenchMode disabled successfully.')}>Disable BenchMode</Button>
               </Grid>
             </Grid>
           </Section>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Grid, Typography, Paper, Button } from '@mui/material';
+import { Container, Grid, Typography, Paper, Button, Fab } from '@mui/material';
 import { styled } from '@mui/system';
 import dynamic from 'next/dynamic';
+import html2canvas from 'html2canvas';
 import VoltageChart from '../components/VoltageChart';
 import StatusMessages from '../components/StatusMessages';
 import AnomalyDetection from '../components/AnomalyDetection';
@@ -10,15 +11,11 @@ import VehiclePieChart from '../components/VehiclePieChart';
 import TestCard from '../components/TestCard';
 import NavBar from '../components/NavBar';
 import VehicleHealthReport from '../components/VehicleHealthReport';
+import ChatComponent from '../components/ChatComponent';
 import SoftwareManagement from '../components/SoftwareManagement';
 import PermissionHandler from '../components/PermissionHandler';
 import LiveBugChart from '../components/LiveBugChart';
-import {
-  mockVoltageData,
-  mockStatusMessages,
-  mockVehicleSpecs,
-  mockVehicleTypes,
-} from './mockData';
+import { mockVoltageData, mockStatusMessages, mockVehicleSpecs, mockVehicleTypes } from './mockData';
 
 const ChargerIssueMap = dynamic(() => import('../components/ChargerIssueMap'), { ssr: false });
 const PDFDownloadLink = dynamic(() => import('@react-pdf/renderer').then(mod => mod.PDFDownloadLink), { ssr: false });
@@ -34,6 +31,15 @@ const StyledPaper = styled(Paper)({
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
 });
 
+const chartToImage = async (chartId) => {
+  const chartElement = document.getElementById(chartId);
+  if (!chartElement) {
+    throw new Error(`Element with id ${chartId} not found`);
+  }
+  const canvas = await html2canvas(chartElement);
+  return canvas.toDataURL('image/png');
+};
+
 export default function Home() {
   const [voltageData, setVoltageData] = useState(mockVoltageData);
   const [statusMessages, setStatusMessages] = useState([]);
@@ -41,6 +47,7 @@ export default function Home() {
   const [vehicleSpecs, setVehicleSpecs] = useState(mockVehicleSpecs);
   const [status, setStatus] = useState('Good');
   const [charts, setCharts] = useState({});
+  const [chatVisible, setChatVisible] = useState(false);
 
   useEffect(() => {
     let index = 0;
@@ -65,30 +72,6 @@ export default function Home() {
       vehiclePieChartUrl,
     });
   };
-
-  // 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const voltageResponse = await axiosInstance.get('/voltage?records=100');
-  //       setVoltageData(voltageResponse.data.data);
-
-  //       const statusResponse = await axiosInstance.get('/voltage/alerts');
-  //       setStatusMessages(statusResponse.data);
-
-  //       const vehicleTypesResponse = await axiosInstance.get('/vehicle/types');
-  //       setVehicleTypes(vehicleTypesResponse.data);
-
-  //       const vehicleSpecsResponse = await axiosInstance.get('/vehicle/specs');
-  //       setVehicleSpecs(vehicleSpecsResponse.data);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //       setStatus('Down');
-  //     }
-  //   }
-
-  //   fetchData();
-  // }, []);
 
   const vehicleData = {
     voltageData,
@@ -197,6 +180,15 @@ export default function Home() {
           </StyledPaper>
         </Grid>
       </Grid>
+      <Fab
+        color="primary"
+        aria-label="chat"
+        style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000 }}
+        onClick={() => setChatVisible(!chatVisible)}
+      >
+        Chat
+      </Fab>
+      <ChatComponent visible={chatVisible} onClose={() => setChatVisible(false)} />
     </StyledContainer>
   );
 }
