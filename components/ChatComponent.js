@@ -29,7 +29,7 @@ const HandleQuery = ({ steps, triggerNextStep }) => {
   const [response, setResponse] = useState(null);
 
   useEffect(() => {
-    if (response) return; // Ensure response is generated only once
+    if (response) return;
 
     const userInput = steps.userInput.value.toLowerCase();
     const allWords = Array.from(new Set([...userInput.split(' '), ...responses.join(' ').toLowerCase().split(' ')]));
