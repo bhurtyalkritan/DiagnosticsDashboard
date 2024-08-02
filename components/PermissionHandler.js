@@ -48,7 +48,7 @@ const PermissionHandler = () => {
 
   const handleModuleChange = (event) => {
     setModuleName(event.target.value);
-    setPartName(''); // Reset part name when module changes
+    setPartName('');
   };
 
   return (
